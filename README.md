@@ -57,6 +57,7 @@ CipherRelay lets end‑users submit an initial message + file, receive a 4‑wor
 2. **Inbox** → Table of threads (Subject, Created, Status) with pagination & filters
 3. **Thread detail** → Conversation, reply form, status dropdown, **notes** panel, file download
 
+![alt text](http://url/to/img.png)
 
 ---
 
