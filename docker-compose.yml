@@ -5,11 +5,12 @@ services:
     build:
       context: ./docker/php
       dockerfile: Dockerfile
-    image: cipherrelay-php:latest
     container_name: cipherrelay-app
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
+    tty: true
+    stdin_open: true
     environment:
       APP_ENV: local
       PHP_MEMORY_LIMIT: 512M
@@ -25,6 +26,7 @@ services:
     container_name: cipherrelay-web
     ports:
       - "8020:80"
+    tty: true
     volumes:
       - ./:/var/www/html:ro
       - ./docker/nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf:ro
@@ -35,9 +37,12 @@ services:
     restart: unless-stopped
 
   queue:
-    image: cipherrelay-php:latest
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
     container_name: cipherrelay-queue
     working_dir: /var/www/html
+    tty: true
     command: sh -lc "php artisan queue:work --verbose --tries=3 --timeout=90"
     volumes:
       - ./:/var/www/html
@@ -49,7 +54,9 @@ services:
     restart: unless-stopped
 
   scheduler:
-    image: cipherrelay-php:latest
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
     container_name: cipherrelay-scheduler
     working_dir: /var/www/html
     command: sh -lc "php artisan schedule:work"
@@ -67,19 +74,14 @@ services:
     container_name: cipherrelay-mysql
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: laravel
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "33060:3306"
     volumes:
       - db_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - cipherrelay
     restart: unless-stopped
@@ -89,7 +91,7 @@ services:
     container_name: cipherrelay-redis
     command: ["redis-server", "--appendonly", "yes"]
     ports:
-      - "6379:6379"
+      - "1279:6379"
     volumes:
       - redis_data:/data
     healthcheck:

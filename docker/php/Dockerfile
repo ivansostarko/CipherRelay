@@ -6,15 +6,19 @@ RUN apk add --no-cache \
     bash git unzip icu-dev libzip-dev oniguruma-dev autoconf g++ make \
     libsodium-dev openssl-dev linux-headers
 
+
+#RUN apt-get install -y libsodium-dev pkg-config
+
 # PHP Extensions
 RUN docker-php-ext-configure intl \
  && docker-php-ext-install -j$(nproc) pdo_mysql mbstring zip intl pcntl
 
-# PECL extensions (redis, sodium)
-RUN pecl install redis \
- && docker-php-ext-enable redis \
- && echo "yes" | pecl install sodium \
- && docker-php-ext-enable sodium
+# PECL extensions redis
+RUN pecl install redis 
+RUN docker-php-ext-enable redis
+#RUN pecl install sodium
+RUN docker-php-ext-enable sodium
+
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -38,4 +42,18 @@ WORKDIR /var/www/html
 # RUN addgroup -g 1000 app && adduser -D -u 1000 -G app app
 # USER app
 
+
+
+
+# Ensure correct permissions
+RUN chown -R www-data:www-data /var/www/html
+
+# Switch to the non-privileged user to run the application
+USER www-data
+
+# Change the default command to run the entrypoint script
+#ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
 CMD ["php-fpm"]

@@ -18,7 +18,7 @@
             <div class="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between">
                 <a href="{{ url('/') }}" class="font-semibold">🗂️ Messages</a>
                 <div class="flex items-center gap-3">
-                    <button id="themeToggle" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-700 text-sm">Toggle theme</button>
+                   
                     {{ $headerActions ?? '' }}
                 </div>
             </div>
