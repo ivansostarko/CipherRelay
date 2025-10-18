@@ -1,6 +1,6 @@
 # CipherRelay
 
-**Encrypted, passcode‑based message dropbox built with Laravel 12, MySQL, and Redis.**
+**An end-to-end virtual communication system for secure data exchange with zero metadata exposure.**
 
 CipherRelay lets end‑users submit an initial message + file, receive a 4‑word passcode, and later return with that passcode to continue the conversation. Admins can see all threads, reply, change status, add internal notes, and download encrypted attachments. All texts and files are encrypted at rest using the [ivansostarko/otto-crypt-php] package.
 
@@ -38,7 +38,6 @@ CipherRelay lets end‑users submit an initial message + file, receive a 4‑wor
 - 🗒️ **Admin-only notes** per thread
 - 📊 **Admin inbox**: paginated, filterable by status, subject-search (see notes on encrypted search)
 - 🎚️ **Statuses:** `new_from_user`, `add_more`, `closed`
-- 🌓 **Dark/Light theme** (Tailwind; localStorage toggle)
 - 🚀 **Redis** for cache + sessions
 
 ---
@@ -78,12 +77,11 @@ CipherRelay lets end‑users submit an initial message + file, receive a 4‑wor
 ---
 
 ## Tech Stack
-- **Framework:** Laravel 12 (PHP 8.2+)
+- **Framework:** Laravel 12 (PHP 8.3+)
 - **Database:** MySQL (or MariaDB)
 - **Cache & Sessions:** Redis
 - **Encryption:** `ivansostarko/otto-crypt-php`
-- **Frontend:** Blade + TailwindCSS (CDN), dark/light theme toggle
-
+- **Frontend:** Blade + TailwindCSS (CDN)
 ---
 
 ## Architecture
